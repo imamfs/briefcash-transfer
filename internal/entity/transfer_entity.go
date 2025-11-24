@@ -69,3 +69,8 @@ type FeeSettings struct {
 	CreatedAt     time.Time `gorm:"created_at"`
 	LastUpdated   time.Time `gorm:"last_updated"`
 }
+
+type MerchantBalance struct {
+	MerchantCode string  `gorm:"column:merchant_code"`
+	Balance      float64 `gorm:"column:balance"`
+}
