@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-redsync/redsync/v4"
+	goredis "github.com/go-redsync/redsync/v4/redis/goredis/v9"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -14,7 +16,7 @@ type RedisHelper struct {
 	Client *redis.Client
 }
 
-func NewRedisHelper(cfg config.Config) (*RedisHelper, error) {
+func NewRedisHelper(cfg *config.Config) (*RedisHelper, error) {
 	if cfg.RedisHost == "" || cfg.RedisPort == "" {
 		loghelper.Logger.Info("Redis host or port is not configured in environment")
 		return nil, fmt.Errorf("redis host or port is empty")
@@ -40,6 +42,11 @@ func NewRedisHelper(cfg config.Config) (*RedisHelper, error) {
 	loghelper.Logger.Info("Redis server connected successfully")
 
 	return &RedisHelper{Client: client}, nil
+}
+
+func NewRedsync(redisClient *redis.Client) *redsync.Redsync {
+	pool := goredis.NewPool(redisClient)
+	return redsync.New(pool)
 }
 
 func (r *RedisHelper) Close() error {

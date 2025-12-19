@@ -1,13 +1,13 @@
 package dto
 
 type TransferRequest struct {
-	PartnerReferenceNo       string                 `json:"partnerReferenceNo"`
-	CustomerNumber           string                 `json:"customerNumber"` // phone number
-	AccountType              string                 `json:"accountType"`
-	BeneficiaryAccountNumber string                 `json:"beneficiaryAccountNumber"`
-	BeneficiaryBankCode      string                 `json:"beneficiaryBankCode"`
-	Amount                   TransferAmountData     `json:"amount"`
-	AdditionalInfo           TransferAdditionalInfo `json:"additionalInfo"`
+	PartnerReferenceNo       string              `json:"partnerReferenceNo"`
+	CustomerNumber           string              `json:"customerNumber"` // phone number
+	AccountType              string              `json:"accountType"`
+	BeneficiaryAccountNumber string              `json:"beneficiaryAccountNumber"`
+	BeneficiaryBankCode      string              `json:"beneficiaryBankCode"`
+	Amount                   TransferAmountData  `json:"amount"`
+	AdditionalInfo           TransferRequestInfo `json:"additionalInfo"`
 }
 
 type TransferAmountData struct {
@@ -15,7 +15,7 @@ type TransferAmountData struct {
 	Currency string `json:"currency"`
 }
 
-type TransferAdditionalInfo struct {
+type TransferRequestInfo struct {
 	TransactionDate   string `json:"transactionDate"`
 	CustomerReference string `json:"customerReference"`
 	Channel           string `json:"channel"` // online, bifast, sknbi, rtgs, va, wallet

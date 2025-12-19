@@ -22,12 +22,9 @@ func NewSenderRepository(db *gorm.DB) SenderRepository {
 }
 
 func (s *senderRepository) Save(ctx context.Context, sender *entity.DataSender) error {
-	err := s.db.WithContext(ctx).Table("data_sender").Create(sender).Error
-
-	if err != nil {
-		return fmt.Errorf("failed to save data sender with error %w", err)
+	if err := s.db.WithContext(ctx).Table("data_sender").Create(sender).Error; err != nil {
+		return fmt.Errorf("failed to save data sender, with error: %w", err)
 	}
-
 	return nil
 }
 
