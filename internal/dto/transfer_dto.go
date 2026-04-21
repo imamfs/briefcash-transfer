@@ -5,6 +5,7 @@ type TransferRequest struct {
 	CustomerNumber           string              `json:"customerNumber"` // phone number
 	AccountType              string              `json:"accountType"`
 	BeneficiaryAccountNumber string              `json:"beneficiaryAccountNumber"`
+	BeneficiaryName          string              `json:"beneficiaryName"`
 	BeneficiaryBankCode      string              `json:"beneficiaryBankCode"`
 	Amount                   TransferAmountData  `json:"amount"`
 	AdditionalInfo           TransferRequestInfo `json:"additionalInfo"`
@@ -16,16 +17,17 @@ type TransferAmountData struct {
 }
 
 type TransferRequestInfo struct {
-	TransactionDate   string `json:"transactionDate"`
-	CustomerReference string `json:"customerReference"`
-	Channel           string `json:"channel"` // online, bifast, sknbi, rtgs, va, wallet
-	Remarks           string `json:"remarks"`
-	Email             string `json:"email"`
-	Address           string `json:"address"`
-	Citizenship       string `json:"citizenship"` // wna, wni
-	TransferPurpose   string `json:"transferPurpose"`
-	TransferActivity  string `json:"transferActivity"` // only mandatory for non indonesian citizen
-	CustomerType      string `json:"customerType"`     // 01 - individu, 02 - corporate, 03 - others
+	TransactionDate     string `json:"transactionDate"`
+	Reference           string `json:"customerReference"`
+	Channel             string `json:"channel"` // online, bifast, sknbi, rtgs, va, wallet
+	Remarks             string `json:"remarks"`
+	Email               string `json:"email"`
+	Address             string `json:"address"`
+	BenficiaryResidence string `json:"customerResidence"`
+	Citizenship         string `json:"citizenship"` // wna, wni
+	TransferPurpose     string `json:"transferPurpose"`
+	TransferActivity    string `json:"transferActivity"` // only mandatory for non indonesian citizen
+	BeneficiaryType     string `json:"customerType"`     // 01 - individu, 02 - corporate, 03 - others
 }
 
 type TransferResponse struct {

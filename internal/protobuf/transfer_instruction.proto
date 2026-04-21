@@ -5,21 +5,25 @@ package protobuf;
 option go_package = "./internal/protobuf";
 
 message TransferRequest {
-    string external_id = 1;
+        string external_id = 1;
     string partner_ref_no = 2;
     string customer_number = 3;
     string account_type = 4;
     string beneficiary_account_no = 5;
-    string beneficiary_bank_code = 6;
-    string amount = 7;
-    string transaction_date = 8;
-    string customer_reference = 9;
-    string channel = 10;
-    string remarks = 11;
-    string email = 12;
-    string address = 13;
-    string citizenship = 14;
-    string transfer_purpose = 15;
-    string transfer_activity = 16;
-    string customer_type = 17;
+    string beneficiary_name = 6;
+    string beneficiary_bank_code = 7;
+    string amount = 8;
+    string transaction_date = 9;
+    string customer_reference = 10;
+    string channel = 11;
+    string remarks = 12;
+    string email = 13;
+    string address = 14;
+    string citizenship = 15;
+    string transfer_purpose = 16;
+    string transfer_activity = 17;
+    string customer_type = 18;
+    float total_charge = 19;
+    string merchant_code = 20;
+    string customer_residence = 21;
 }

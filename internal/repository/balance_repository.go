@@ -42,7 +42,7 @@ func (a *balanceRepository) Debit(ctx context.Context, merchantCode string, tota
 func (a *balanceRepository) Credit(ctx context.Context, merchantCode string, amount float64) (float64, error) {
 	var balance float64
 	result := a.db.WithContext(ctx).Model(&entity.MerchantAccounts{}).
-		Where("merchant_code = ?", merchantCode, amount).
+		Where("merchant_code = ?", merchantCode).
 		Clauses(clause.Returning{Columns: []clause.Column{{Name: "balance"}}}).
 		UpdateColumn("balance", gorm.Expr("balance + ?", amount)).Scan(&balance)
 	if result.Error != nil {

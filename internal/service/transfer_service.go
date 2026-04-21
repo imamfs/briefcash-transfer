@@ -118,7 +118,7 @@ func (t *transferService) TransferRequest(ctx context.Context, request dto.Trans
 
 	// publish trigger transfer to kafka
 	log.Info("Publish trigger transfer to kafka")
-	if err := t.publishMessage(request, externalId, log); err != nil {
+	if err := t.publishMessage(request, externalId, log, feeSetting.TotalCharge, merchantCode); err != nil {
 		log.Warn("Trigger transfer failed, refund merchant balance in redis")
 		if err := t.redisService.RefundBalance(ctx, merchantCode, totalAmount, log); err != nil {
 			return t.handleTransferResponse(constants.ErrInternalServerError, constants.ResponseMap[constants.ErrInternalServerError], "", request.PartnerReferenceNo, "0", &feeSetting)
@@ -209,7 +209,7 @@ func (t *transferService) sumAmount(fee entity.FeeSettings, amount string) float
 	return totalCharge
 }
 
-func (t *transferService) publishMessage(request dto.TransferRequest, externalId string, log *logrus.Entry) error {
+func (t *transferService) publishMessage(request dto.TransferRequest, externalId string, log *logrus.Entry, totalCharge float64, merchantCode string) error {
 	payload := &protobuf.TransferRequest{
 		ExternalId:           externalId,
 		PartnerRefNo:         request.PartnerReferenceNo,
@@ -217,9 +217,10 @@ func (t *transferService) publishMessage(request dto.TransferRequest, externalId
 		AccountType:          request.AccountType,
 		BeneficiaryAccountNo: request.BeneficiaryAccountNumber,
 		BeneficiaryBankCode:  request.BeneficiaryBankCode,
+		BeneficiaryName:      request.BeneficiaryName,
 		Amount:               request.Amount.Value,
 		TransactionDate:      request.AdditionalInfo.TransactionDate,
-		CustomerReference:    request.AdditionalInfo.CustomerReference,
+		CustomerReference:    request.AdditionalInfo.Reference,
 		Channel:              request.AdditionalInfo.Channel,
 		Remarks:              request.AdditionalInfo.Remarks,
 		Email:                request.AdditionalInfo.Email,
@@ -227,7 +228,10 @@ func (t *transferService) publishMessage(request dto.TransferRequest, externalId
 		Citizenship:          request.AdditionalInfo.Citizenship,
 		TransferPurpose:      request.AdditionalInfo.TransferPurpose,
 		TransferActivity:     request.AdditionalInfo.TransferActivity,
-		CustomerType:         request.AdditionalInfo.CustomerType,
+		CustomerType:         request.AdditionalInfo.BeneficiaryType,
+		TotalCharge:          float32(totalCharge),
+		MerchantCode:         merchantCode,
+		CustomerResidence:    request.AdditionalInfo.BenficiaryResidence,
 	}
 
 	protoBytes, err := proto.Marshal(payload)
@@ -264,7 +268,7 @@ func (r *transferService) handlePublishFailure(ctx context.Context, merchantCode
 		pm := manager.NewTransferPersistenceManager(ledgerTx, transferTx, nil, accountTx)
 
 		// get transfer Data
-		transfer, err := pm.FindTransferByPartnerReference(ctx, request.PartnerReferenceNo)
+		transfer, err := pm.FindTransferByPartnerRefNo(ctx, request.PartnerReferenceNo)
 		if err != nil {
 			return err
 		}

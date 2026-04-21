@@ -13,7 +13,7 @@ import (
 type AccountStatementManager interface {
 	CreateRecipient(ctx context.Context, request dto.TransferRequest) (*entity.DataRecipient, error)
 	CreateTransfer(ctx context.Context, recipient *entity.DataRecipient, request dto.TransferRequest, adminFee entity.FeeSettings, partnerId, referenceNumber string, amountTransfer float64) (*entity.Transaction, error)
-	FindTransferByPartnerReference(ctx context.Context, partnerReferenceNo string) (*entity.TransferTemp, error)
+	FindTransferByPartnerRefNo(ctx context.Context, partnerReferenceNo string) (*entity.TransferTemp, error)
 	DebitMerchant(ctx context.Context, merchantCode string, totalAmount float64) (float64, error)
 	CreditMerchant(ctx context.Context, merchantCode string, amount float64) (float64, error)
 	CreateTransferLedger(ctx context.Context, transferId int64, request dto.TransferRequest, balance float64, merchantCode string, amountTransfer float64) error
@@ -79,7 +79,7 @@ func (tp *transferPersistenceService) CreateTransfer(ctx context.Context, recipi
 	return transfer, nil
 }
 
-func (tp *transferPersistenceService) FindTransferByPartnerReference(ctx context.Context, partnerReferenceNo string) (*entity.TransferTemp, error) {
+func (tp *transferPersistenceService) FindTransferByPartnerRefNo(ctx context.Context, partnerReferenceNo string) (*entity.TransferTemp, error) {
 	transfer, err := tp.transferRepo.FindByRefNo(ctx, partnerReferenceNo)
 	if err != nil {
 		return nil, err

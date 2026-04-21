@@ -18,7 +18,7 @@ type RedisHelper struct {
 
 func NewRedisHelper(cfg *config.Config) (*RedisHelper, error) {
 	if cfg.RedisHost == "" || cfg.RedisPort == "" {
-		loghelper.Logger.Info("Redis host or port is not configured in environment")
+		loghelper.Logger.Error("Redis host or port is not configured in environment")
 		return nil, fmt.Errorf("redis host or port is empty")
 	}
 	address := fmt.Sprintf("%s:%s", cfg.RedisHost, cfg.RedisPort)

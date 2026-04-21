@@ -5,7 +5,6 @@ go 1.25.1
 require (
 	github.com/IBM/sarama v1.46.3
 	github.com/gin-gonic/gin v1.11.0
-	github.com/go-redsync/redsync v1.4.2
 	github.com/go-redsync/redsync/v4 v4.15.0
 	github.com/joho/godotenv v1.5.1
 	github.com/redis/go-redis/v9 v9.17.2
